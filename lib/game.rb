@@ -22,6 +22,8 @@ class Game
     view.each do |l|
       puts l
     end
+    
+    puts @board.board_status
   end
   
   def play_game

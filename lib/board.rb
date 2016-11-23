@@ -1,6 +1,11 @@
 class Board
+  @@players = [:x, :o]
+  
+  attr_reader :state
+  
   def initialize(state)
     @state = state
+    @move_count = 0
   end
   
   # Answers an array of the columns which are not full
@@ -10,6 +15,31 @@ class Board
   
   # Move is a 0-indexed column
   def play_move(move)
+    col = @state[move]
+    puts "col is #{col}"
+    found_cell = false
+    col2 = col.map do |cell|
+      #puts "move is #{move}, cell is #{cell}, i is #{i}"
+      if (!found_cell && cell == :e)
+        #puts "about to modify #{@state[move][i]}"
+        found_cell = true
+        next_mover
+      else
+    
+        puts "****"
+        view = board_view
+        view.each do |l|
+          puts l
+        end
+        puts "@@@@@@@@@@@@@"
+        
+        cell
+      end
+    end
+    
+    @state[move] = col2
+    
+    @move_count += 1
   end
   
   def done?
@@ -45,5 +75,32 @@ class Board
     # No empty cells left, so done
     return true
   end
+  
+  def board_view
+    lines = []
+    6.times do |row|
+      line = []
+      7.times do |column|
+        cell_contents = @state[column][row]
+        if (cell_contents == :e)
+          line << " "
+        else
+          line << cell_contents.to_s.upcase
+        end
+      end
+      lines << line.join(" ")
+    end
+    lines.reverse  
+  end
+  
+  def board_status
+    "Next player to move is " + next_mover.to_s.upcase
+  end
+    
+  private
+  def next_mover
+    @@players[@move_count % 2]
+  end
+  
   
 end
