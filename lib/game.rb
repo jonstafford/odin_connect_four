@@ -5,14 +5,20 @@ class Game
   
   def initialize
     state = []
-    7.times { state << [] }
+    7.times do
+      column = []
+      6.times { column << :e }
+      state << column
+    end
     @board = Board.new(state)
   end
   
   # Answers 0-indexed column that player wants to play move to
   def get_move(possibles)
     begin
-      move = STDIN.getch.to_i - 1
+      ch = STDIN.getch
+      exit(1) if ch == "\u0003"
+      move = ch.to_i - 1
     end until possibles.include? move
     move
   end

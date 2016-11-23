@@ -2,7 +2,7 @@ require './lib/board'
 
 describe Board do
 
-  let(:empty_column) do
+  def empty_column
     column = []
     6.times { column << :e }
     column
@@ -25,6 +25,16 @@ describe Board do
       4.times { state << [:x, :e, :e, :e, :e, :e]}
       expect(Board.new(state).done?).to be true
     end  
+
+    it "4 in dialogonally done" do
+      state = []
+      3.times { state << empty_column }
+      state << [:x, :e, :e, :e, :e, :e]
+      state << [:e, :x, :e, :e, :e, :e]
+      state << [:e, :e, :x, :e, :e, :e]
+      state << [:e, :e, :e, :x, :e, :e]
+      expect(Board.new(state).done?).to be true
+    end  
     
     it "when full done" do
       state = []
@@ -45,12 +55,12 @@ describe Board do
       lines = board.board_view
       
       expected = []
-      expected << "             "
-      expected << "             "
-      expected << "             "
-      expected << "             "
-      expected << "             "
-      expected << "      X X X X"
+      expected << "_|_|_|_|_|_|_"
+      expected << "_|_|_|_|_|_|_"
+      expected << "_|_|_|_|_|_|_"
+      expected << "_|_|_|_|_|_|_"
+      expected << "_|_|_|_|_|_|_"
+      expected << "_|_|_|X|X|X|X"
       
       expect(lines).to eql(expected)
     end
@@ -58,32 +68,13 @@ describe Board do
   
   describe "#play_move" do
     it "puts pieces in the right place" do
-      
- 
-      
       board = Board.new(empty_state)
-
-
-      view = board.board_view
-      view.each do |l|
-        puts l
-      end
-
-
 
       board.play_move(4)
       board.play_move(4)
       board.play_move(2)
       board.play_move(4)
 
-      view = board.board_view
-      view.each do |l|
-        puts l
-      end
-
-
-
-      
       expected_state = []
       2.times { expected_state << empty_column }
       expected_state << [:x, :e, :e, :e, :e, :e]
@@ -105,7 +96,6 @@ describe Board do
       state << empty_column 
       state << [:x, :x, :x, :o, :x, :x]
       state << empty_column 
-      
       
       expect(Board.new(state).possible_moves).to eql([0, 1, 4, 6])
     end
